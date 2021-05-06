@@ -11,16 +11,7 @@ import { AnswerDTO } from 'src/dto/server/answer.dto';
 @Controller('api/users')
 export class UsersController {
     constructor(private usersService: UsersService) { };
-    /**
-     * Obtém os dados de um usuário específico.
-     *
-     * @param req objeto gerado pelo JwtAuthGard com atributo 'user' que
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
+
     @UseGuards(JwtAuthGuard)
     @Get('one')
     @ApiBearerAuth()
@@ -34,16 +25,7 @@ export class UsersController {
             throw error.message || error;
         }
     }
-    /**
-     * Obtém os dados de um usuário específico.
-     * 
-     * @param req objeto gerado pelo JwtAuthGard com atributo 'user' que 
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     * 
-     * @returns retorna um objeto User em caso de sucesso ou lança uma 
-     * exceção de BadRequest ou Forbidden
-     */
+
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiBearerAuth()
@@ -79,16 +61,6 @@ export class UsersController {
         return response.getDTO();
     }
 
-    /**
-     * Obtém os dados de um usuário específico.
-     *
-     * @param req objeto gerado pelo JwtAuthGard com atributo 'user' que
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
     @UseGuards(JwtAuthGuard)
     @Get()
     @ApiBearerAuth()
@@ -111,18 +83,6 @@ export class UsersController {
         }
     }
 
-
-
-    /**
-     * Cria um usuario.
-     *
-     * @param IUserDocument objeto gerado pelo JwtAuthGard com atributo 'user' que
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
     @Post()
     async create(@Body() createUserDto: CreateUserDTO): Promise<AnswerDTO<ReadUserDTO>> {
         try {
@@ -134,16 +94,6 @@ export class UsersController {
         }
     }
 
-    /**
-     * Atualiza um usuario.
-     *
-     * @param IUserDocument objeto gerado pelo JwtAuthGard com atributo 'user' que
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
     @UseGuards(JwtAuthGuard)
     @Put()
     @ApiBearerAuth()
@@ -158,16 +108,6 @@ export class UsersController {
         }
     }
 
-    /**
-     * Deleta todos os usuarios.
-     *
-     * @param IUserDocument objeto gerado pelo JwtAuthGard com atributo 'user' que
-     * referencia o usuário da credendical enviada
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
     @UseGuards(JwtAuthGuard)
     @Delete()
     @ApiBearerAuth()
@@ -190,14 +130,6 @@ export class UsersController {
         }
     }
 
-    /**
-     * Deleta um usuario por seu id.
-     *
-     * @param userId identificador do usuário que se deseja consultar
-     *
-     * @returns retorna um objeto User em caso de sucesso ou lança uma
-     * exceção de BadRequest ou Forbidden
-     */
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @ApiBearerAuth()

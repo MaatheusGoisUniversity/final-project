@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PokeModule } from './poke/poke.module';
 
 const options = {
   autoIndex: false, // Don't build indexes
@@ -18,7 +19,8 @@ const options = {
   imports: [
     MongooseModule.forRoot('mongodb+srv://admin:t2KmrKHRqAMtPFb1@finalproject.qohxt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', options),
     AuthModule,
-    UsersModule
+    UsersModule,
+    PokeModule
   ],
   controllers: [AppController],
   providers: [],
