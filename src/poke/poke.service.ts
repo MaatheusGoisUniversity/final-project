@@ -12,13 +12,17 @@ export class PockService {
     ) { }
 
     async create(poke: CreatePokeDTO, userId: string): Promise<CreatePokeDTO> {
-        if (await this.pokeModel.findOne({ identifier: poke.identifier })) throw 'Pokemon já cadastrado.'
+        if (await this.pokeModel.findOne({ identifier: poke.identifier, userId })) throw 'Pokemon já cadastrado.'
         poke.userId = userId;
         return this.pokeModel.create(poke)
     }
 
     async read(userId: string): Promise<CreatePokeDTO[]> {
         return this.pokeModel.find({ userId })
+    }
+
+    async readList(userId: string): Promise<number[]> {
+        return (await this.read(userId)).map((poke) => poke.identifier)
     }
 
     async deleteOne(identifier: number, userId: string): Promise<CreatePokeDTO> {

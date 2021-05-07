@@ -12,21 +12,19 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    /**
-     * Função que registra utilizando token JWT o login de um usuário
-     * 
-     * @param req dados do usuário autenticado no sistema
-     * 
-     * @returns retorna um objeto contendo a chave JWT
-     */
     @Post('login')
     async login(@Body() loginUserDto: UsersLoginDto) {
         try {
             const user = await this.authService.validateUser(loginUserDto);
             const message = "Login efetuado com sucesso!";
-            const data = await this.authService.login(user);
+            const token = await this.authService.login(user);
+            const name = user.name;
+            const data = {
+                token,
+                name
+            }
 
-            return new AnswerDTO<string>(message, data);
+            return new AnswerDTO<any>(message, data);
 
         } catch (error) {
             console.log("data", error)
@@ -34,47 +32,22 @@ export class AuthController {
         }
     }
 
-    /**
-     * Método utilitário para ajudar no desenvolvimento, retorna
-     * os dados de payload do token JWT, caso ele seja válido
-     * 
-     * @param req dados do usuário autenticado no atributo user
-     * 
-     * @returns o playload do token JWT
-     */
     @UseGuards(JwtAuthGuard)
     @Get('jwt')
     @ApiBearerAuth()
     getProfile(@Request() req: any) {
-        return req.user;
+        return new AnswerDTO<string>('JWT lido com sucesso', req.user)
     }
 
-
-    /**
-     * Método utilitário para a recuperação de senha do usuário,
-     * ele envia um e-mail para o usuário para a confirmação da senha.
-     *
-     * @param req dados do usuário autenticado no atributo user
-     *
-     * @returns o playload do token JWT
-    */
     @Post('/recover-email')
     async sendRecoverPasswordEmail(@Body() recover: RecoverEmailDTO): Promise<AnswerDTO<number>> {
         await this.authService.sendRecoverPasswordEmail(recover.email);
-        return new AnswerDTO('Foi enviado um email com instruções para resetar sua senha', 200);
+        return new AnswerDTO('Foi enviado um email com instruções para resetar sua senha');
     }
 
-    /**
-     * Método utilitário para a recuperação de senha do usuário,
-     * ele envia um e-mail para o usuário para a confirmação da senha.
-     *
-     * @param req dados do usuário autenticado no atributo user
-     *
-     * @returns o playload do token JWT
-    */
     @Post('/reset-password')
     async resetPassword(@Body() reset: ResetPasswordDTO): Promise<AnswerDTO<number>> {
         await this.authService.resetPassword(reset);
-        return new AnswerDTO('Senha alterada com sucesso!', 200);
+        return new AnswerDTO('Senha alterada com sucesso!');
     }
 }

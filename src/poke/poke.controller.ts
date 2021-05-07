@@ -6,7 +6,7 @@ import { AnswerDTO } from 'src/dto/server/answer.dto';
 import { PockService } from './poke.service';
 
 @ApiTags('Pokemon')
-@Controller('pokemon')
+@Controller('api/pokemon')
 export class PockController {
     constructor(private readonly pokeService: PockService) { };
 
@@ -39,12 +39,26 @@ export class PockController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('list')
+    @ApiBearerAuth()
+    async readList(@Request() req: any): Promise<AnswerDTO<number[]>> {
+        const { id } = req.user;
+        try {
+            const message = "Lista dos pokemons lida com sucesso!";
+            const pokeDto = await this.pokeService.readList(id);
+            return new AnswerDTO<number[]>(message, pokeDto);;
+        } catch (error) {
+            throw error.message || error;
+        }
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Delete(':identifier')
     @ApiBearerAuth()
     async delete(@Request() req: any, @Param('identifier') identifier: number): Promise<AnswerDTO<CreatePokeDTO>> {
         const { id } = req.user;
         try {
-            const message = "Pokemon deletado com sucesso!";
+            const message = "Pokemon removido com sucesso!";
             const pokeDto = await this.pokeService.deleteOne(identifier, id);
             return new AnswerDTO<CreatePokeDTO>(message, pokeDto);;
         } catch (error) {
